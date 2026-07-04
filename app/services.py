@@ -11,26 +11,19 @@ def predict_latest(model):
     if not DATA_PATH.exists():
         raise FileNotFoundError(f"Feature data not found: {DATA_PATH}")
     df = pd.read_csv(DATA_PATH)
+    # 모델 입력에 사용할 Feature 컬럼 선택
+    feature_columns = [col for col in df.columns if col not in ["date", "target"]]
 
-    # 모델이 학습한 Feature가 CSV에 모두 존재하는지
-    missing_features = [
-        feature
-        for feature in model.feature_names_in_
-        if feature not in df.columns
-    ]
+    # Feature 컬럼이 없는 경우 예외 처리
+    if not feature_columns:
+        raise ValueError("No feature columns found.")
 
-    # 하나라도 없으면 예측 불가
-    if missing_features:
-        raise KeyError(f"Missing model features: {missing_features}")
-
-
-    # 날짜 기준으로 정렬 후 가장 최신 데이터 선택
+    # 최신 데이터 선택
     latest_row = df.sort_values("date").iloc[-1]
-    # 예측 기준 날짜 저장
     prediction_date = latest_row["date"]
 
-    # 모델 입력에 필요 없는 date 컬럼 제거
-    X = latest_row[model.feature_names_in_].to_frame().T
+    # 예측 입력 데이터 생성
+    X = latest_row[feature_columns].to_frame().T
 
     prediction = model.predict(X)[0]
     # API 응답 형태로 반환
