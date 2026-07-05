@@ -1,33 +1,44 @@
-# 📈 Interest Rate Analysis Dashboard
-### 정형 경제지표 기반 금리 분석 및 예측 대시보드
+# 🇰🇷 Korea Base Rate Prediction System
 
-> 한국은행 ECOS(Open API)에서 제공하는 경제지표를 활용하여 금리 데이터를 분석하고,
-> Django 기반 웹 대시보드에서 시각화하는 프로젝트입니다.
+> 한국은행 ECOS Open API와 머신러닝(RandomForest)을 활용하여 다음 달 한국 기준금리를 예측하는 Python 백엔드 프로젝트
 
----
+## 📌 Project Overview
 
-# 📖 프로젝트 소개
+본 프로젝트는 한국은행 **ECOS Open API**에서 경제 데이터를 자동 수집하고,
+머신러닝(RandomForest)을 이용하여 **다음 달 한국 기준금리**를 예측하는 서비스입니다.
 
-본 프로젝트는 머신러닝을 활용한 금리 예측 과정을 학습하고,
-이를 웹 서비스 형태로 구현하기 위해 진행한 팀 프로젝트입니다.
+예측 모델을 FastAPI 기반 REST API로 제공하며,
+Streamlit을 이용하여 사용자가 쉽게 예측 결과를 확인할 수 있도록 구현하였습니다.
 
-초기에는 **정형 데이터와 비정형 데이터를 모두 활용한 금리 예측**을 목표로 하였으나,
-비정형 데이터 분석 결과가 예측 성능 향상에 유의미한 기여를 하지 못한다고 판단하여
-최종 웹 대시보드는 **한국은행 ECOS 기반 정형 데이터 중심**으로 구현하였습니다.
-
-또한 Django를 활용하여 경제지표를 시각적으로 확인할 수 있는 Dashboard를 개발하였으며,
-머신러닝 모델을 웹 서비스와 연동하는 과정까지 진행하였으나 프로젝트 기간 내 완전한 적용은 이루어지지 않았습니다.
+또한 Docker와 Docker Compose를 적용하여 동일한 실행 환경을 제공합니다.
 
 ---
 
-# 👨‍💻 프로젝트 정보
+# 🏗 System Architecture
 
-| 항목 | 내용 |
-|------|------|
-| 프로젝트명 | Interest Rate Analysis Dashboard |
-| 개발기간 | 2024.06 ~ 2024.12 |
-| 개발인원 | 4명 |
-| 프로젝트 목적 | 머신러닝 기반 금리 분석 및 Django Dashboard 개발 |
+```
+            ECOS Open API
+                    │
+                    ▼
+          Data Collection
+                    │
+                    ▼
+          Data Preprocessing
+                    │
+                    ▼
+       Feature Engineering
+                    │
+                    ▼
+        RandomForest Model
+                    │
+                    ▼
+              FastAPI
+                    │
+            REST API
+                    │
+                    ▼
+             Streamlit UI
+```
 
 ---
 
@@ -36,144 +47,218 @@
 ## Backend
 
 - Python
-- Django
+- FastAPI
+- Pydantic
 
-## Data Analysis
+## Machine Learning
 
-- Pandas
-- NumPy
 - Scikit-learn
+- RandomForest
+- Joblib
 
 ## Frontend
 
-- HTML
-- CSS
-- JavaScript
-- Bootstrap
+- Streamlit
 
-## Database
+## Data
 
-- (사용한 DB 입력)
+- Pandas
+- ECOS Open API
+
+## DevOps
+
+- Docker
+- Docker Compose
 
 ## Version Control
 
 - Git
 - GitHub
+- SourceTree
 
 ---
 
-# 📊 사용 데이터
+# 📂 Project Structure
 
-### 한국은행 ECOS(Open API)
-
-경제지표 데이터를 활용하여 금리 변화와 관련된 데이터를 수집하고 분석하였습니다.
-
-활용 예시
-
-- 기준금리
-- 국고채 금리
-- 경제지표
-
-(실제 사용한 데이터 추가)
-
----
-
-# ✨ 주요 기능
-
-- 한국은행 ECOS 데이터 조회
-- 경제지표 시각화
-- 금리 데이터 그래프 제공
-- Django 기반 Dashboard 구현
-
----
-
-# 🖥 프로젝트 화면
-
-> 프로젝트 실행 화면
-
-(스크린샷 추가 예정)
-
----
-
-# 📂 프로젝트 구조
-
-```text
+```
 interest-rate-dashboard
 
-project_workspace
- └── interest_rate_project
-      ├── dashboard_app
-      ├── interest_rate_project
-      ├── manage.py
-      └── db.sqlite3
+├── app
+│   ├── main.py
+│   ├── services.py
+│   ├── schemas.py
+│   └── model_loader.py
+│
+├── frontend
+│   └── streamlit_app.py
+│
+├── model
+│   └── rf_base_rate.pkl
+│
+├── data
+│   └── processed
+│       └── feature_df.csv
+│
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 ```
+
+---
+
+# 🚀 Features
+
+### Data
+
+- ECOS Open API 자동 데이터 수집
+- 데이터 병합(Merge)
+- 결측치 처리
+- 분기 → 월 변환
+
+### Feature Engineering
+
+- Lag Feature 생성
+- Target 생성(Shift)
+
+### Machine Learning
+
+- RandomForest 모델 학습
+- Feature Importance 분석
+- 모델 저장(Joblib)
+
+### FastAPI
+
+- REST API 제공
+- Swagger(OpenAPI)
+- Service Layer 분리
+- Exception Handling
+
+### Streamlit
+
+- 예측 결과 조회
+- 모델 정보 조회
+- Loading Spinner
+- 사용자 친화적 UI
+
+### Docker
+
+- Dockerfile
+- Docker Compose
+- 컨테이너 실행 지원
+
+---
+
+# 📡 API
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | /model-info | 모델 정보 조회 |
+| GET | /predict/latest | 최신 데이터 기준 금리 예측 |
+
+Swagger
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+# 🐳 Docker
+
+### Build
+
+```bash
+docker build -t interest-rate-api .
+```
+
+### Run
+
+```bash
+docker compose up
+```
+
+---
+
+# 📷 Screenshots
+
+### Streamlit
+
+(프로젝트 실행 화면 추가)
+
+### Swagger
+
+(Swagger 화면 추가)
+
+---
+
+# 📈 Model
+
+Algorithm
+
+- RandomForest Regressor
+
+Input
+
+- 한국은행 ECOS 경제지표
+- Lag Feature
+
+Output
+
+- 다음 달 한국 기준금리 예측
+
+---
+
+# 📚 What I Learned
+
+이번 프로젝트를 진행하면서 다음 내용을 학습하였습니다.
+
+- REST API 설계
+- FastAPI 기반 백엔드 개발
+- Service Layer 분리
+- Exception Handling
+- Streamlit UI 개발
+- Docker 및 Docker Compose
+- Git Branch 전략
+- 머신러닝 모델 서비스화(Serving)
 
 ---
 
 # ⚠ Trouble Shooting
 
-## 머신러닝 모델과 Django 연동
+### feature_names_in_ 오류
 
-### 문제
+RandomForest 모델 저장 시 DataFrame이 아닌 NumPy 배열로 학습하여
 
-머신러닝 모델을 Django 프로젝트와 연동하여
-실시간 예측 기능을 제공하고자 하였으나,
-프로젝트 기간 내 모델 관리 및 서비스 구조를 완성하지 못했습니다.
+```
+AttributeError:
+RandomForestRegressor has no attribute feature_names_in_
+```
 
-### 해결
+오류가 발생하였습니다.
 
-웹 Dashboard 구현을 우선 완료하였으며,
-향후 Pickle 기반 모델 로딩 및 API 구조를 적용하여
-예측 기능을 추가할 예정입니다.
-
----
-
-## 비정형 데이터 활용
-
-### 문제
-
-뉴스 등 비정형 데이터를 활용하여 금리 예측 성능 향상을 시도하였으나,
-유의미한 예측 성능 향상을 확인하지 못했습니다.
-
-### 해결
-
-최종 프로젝트에서는 정형 데이터를 중심으로 Dashboard를 구성하였으며,
-데이터 선택 또한 모델 성능에 중요한 요소라는 점을 경험하였습니다.
+CSV의 Feature 컬럼을 직접 선택하는 방식으로 해결하였습니다.
 
 ---
 
-# 🚀 향후 개선 계획
+# 🔨 Future Improvements
 
-- 머신러닝 모델 Django 연동
-- Docker 적용
-- AWS EC2 배포
-- GitHub Actions 기반 CI/CD 구축
-- 실시간 데이터 자동 수집
-- REST API 제공
-
----
-
-# 📚 프로젝트를 통해 배운 점
-
-이번 프로젝트를 통해
-
-- Django 기반 웹 서비스 개발
-- 경제 데이터 수집 및 전처리
-- 머신러닝 모델 개발 과정
-- Git을 활용한 협업
-- 데이터 분석 결과를 서비스에 적용하는 과정
-
-을 경험할 수 있었습니다.
-
-특히 프로젝트를 진행하면서
-단순히 다양한 데이터를 사용하는 것보다
-모델의 성능과 해석 가능성을 고려하여
-적절한 데이터를 선택하는 과정의 중요성을 배울 수 있었습니다.
+- XGBoost 모델 성능 비교
+- 자동 데이터 업데이트
+- 모델 재학습 자동화
+- AWS 배포
+- CI/CD 구축
 
 ---
 
-# 💡 향후 목표
+# 👨‍💻 Author
 
-현재 프로젝트는 학습 목적의 프로젝트이지만,
-향후 Docker, AWS 배포 및 머신러닝 모델 연동을 적용하여
-실제 서비스 수준의 금융 데이터 분석 플랫폼으로 발전시키는 것을 목표로 하고 있습니다.
+이나영
+
+GitHub
+
+https://github.com/nayoungsoso
+
+Blog
+
+https://blog.naver.com/seotunbread
